@@ -1,0 +1,857 @@
+<title>agent-casebook 運用マニュアル</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root {
+  --paper:       #F6F7F5;
+  --card:        #FFFFFF;
+  --ink:         #16202A;
+  --ink-soft:    #4E5B66;
+  --ink-faint:   #7C8791;
+  --indigo:      #23405E;
+  --indigo-soft: #7A93AE;
+  --indigo-wash: #EAEEF2;
+  --vermilion:   #C0492F;
+  --verm-wash:   #FBEEEA;
+  --moss:        #3F6B4A;
+  --rule:        #D8DCD8;
+  --rule-soft:   #E7EAE6;
+
+  --mincho: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --gothic: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --mono:   "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:       #11161A;
+    --card:        #171E24;
+    --ink:         #E3E7E4;
+    --ink-soft:    #A6B0B7;
+    --ink-faint:   #77828A;
+    --indigo:      #9CBBD8;
+    --indigo-soft: #5D7893;
+    --indigo-wash: #1B2530;
+    --vermilion:   #E88061;
+    --verm-wash:   #2A1B17;
+    --moss:        #7FA98A;
+    --rule:        #293137;
+    --rule-soft:   #1F262C;
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper:       #11161A;
+  --card:        #171E24;
+  --ink:         #E3E7E4;
+  --ink-soft:    #A6B0B7;
+  --ink-faint:   #77828A;
+  --indigo:      #9CBBD8;
+  --indigo-soft: #5D7893;
+  --indigo-wash: #1B2530;
+  --vermilion:   #E88061;
+  --verm-wash:   #2A1B17;
+  --moss:        #7FA98A;
+  --rule:        #293137;
+  --rule-soft:   #1F262C;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--gothic);
+  font-size: 16px;
+  line-height: 1.9;
+  -webkit-font-smoothing: antialiased;
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr);
+  gap: 56px;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 32px 120px;
+}
+
+/* ── 目次 ───────────────────────────── */
+.toc {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  max-height: 100vh;
+  overflow-y: auto;
+  padding: 56px 0 40px;
+  border-right: 1px solid var(--rule);
+}
+.toc .mark {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 20px;
+}
+.toc nav { display: flex; flex-direction: column; }
+.toc a {
+  display: block;
+  padding: 7px 20px 7px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.toc a:last-child { border-bottom: 0; }
+.toc a:hover { color: var(--indigo); }
+.toc a:focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; }
+
+/* ── 本文 ───────────────────────────── */
+main { padding-top: 56px; min-width: 0; }
+
+.masthead { padding-bottom: 36px; border-bottom: 2px solid var(--ink); }
+.masthead .eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--indigo-soft);
+}
+.masthead h1 {
+  font-family: var(--mincho);
+  font-weight: 700;
+  font-size: clamp(30px, 5vw, 44px);
+  line-height: 1.35;
+  letter-spacing: .01em;
+  text-wrap: balance;
+  margin: 10px 0 14px;
+}
+.masthead p {
+  max-width: 40em;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 15.5px;
+}
+
+section { padding-top: 52px; }
+section > h2 {
+  font-family: var(--mincho);
+  font-weight: 700;
+  font-size: 23px;
+  line-height: 1.5;
+  margin: 0 0 6px;
+  text-wrap: balance;
+}
+section > h2 + .lede {
+  max-width: 40em;
+  margin: 0 0 24px;
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+h3 {
+  font-family: var(--gothic);
+  font-weight: 700;
+  font-size: 15.5px;
+  margin: 32px 0 10px;
+  letter-spacing: .01em;
+}
+p { max-width: 40em; }
+section p:last-child { margin-bottom: 0; }
+
+strong { font-weight: 700; }
+a { color: var(--indigo); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+code {
+  font-family: var(--mono);
+  font-size: .88em;
+  background: var(--indigo-wash);
+  color: var(--ink);
+  padding: .12em .38em;
+  border-radius: 3px;
+}
+
+pre {
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.75;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--indigo-soft);
+  padding: 18px 20px;
+  overflow-x: auto;
+  margin: 0 0 8px;
+}
+pre code { background: none; padding: 0; font-size: inherit; }
+
+.scroller { overflow-x: auto; margin-bottom: 8px; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 460px;
+  font-size: 14.5px;
+  font-variant-numeric: tabular-nums;
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 11px 16px 11px 0;
+  border-bottom: 1px solid var(--rule-soft);
+}
+th {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 500; }
+
+ul { padding-left: 1.15em; max-width: 40em; }
+li { margin-bottom: 6px; }
+li::marker { color: var(--indigo-soft); }
+
+/* ── ライフサイクル（実際に順序があるので連番） ── */
+.steps { display: flex; flex-direction: column; gap: 0; margin-top: 8px; }
+.step {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 18px;
+  padding: 22px 0;
+  border-top: 1px solid var(--rule-soft);
+}
+.step:first-child { border-top: 1px solid var(--rule); }
+.step .n {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--indigo-soft);
+  padding-top: 2px;
+}
+.step h3 { margin: 0 0 6px; }
+.step p { margin: 0 0 10px; color: var(--ink-soft); font-size: 15px; }
+.step p:last-child, .step pre:last-child { margin-bottom: 0; }
+
+/* ── 担当ラベル ──────────────────────── */
+.actor {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+  padding: 1px 8px 2px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  margin-bottom: 9px;
+  color: var(--ink-faint);
+}
+.actor.you { color: var(--ink); border-color: var(--ink-soft); }
+.actor.ai  { color: var(--indigo); border-color: var(--indigo-soft); background: var(--indigo-wash); }
+
+/* ── あなたがやることブロック ──────────── */
+.yours {
+  border: 1px solid var(--indigo-soft);
+  background: var(--indigo-wash);
+  padding: 22px 26px;
+  margin: 8px 0 8px;
+}
+.yours .tag {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  color: var(--indigo);
+  margin-bottom: 12px;
+}
+.yours ol { margin: 0 0 14px; padding-left: 1.3em; max-width: 40em; }
+.yours ol li { margin-bottom: 4px; font-weight: 500; }
+.yours ol li::marker { color: var(--indigo); font-family: var(--mono); }
+.yours p { margin: 0; font-size: 15px; color: var(--ink-soft); }
+
+/* ── 分担表 ─────────────────────────── */
+.who td:nth-child(2) { color: var(--ink); width: 30%; }
+.who td:nth-child(3) { color: var(--ink-soft); }
+td.none { color: var(--ink-faint); font-weight: 400; }
+
+/* ── 原則ブロック ────────────────────── */
+.rule {
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  padding: 20px 0 22px;
+  margin: 8px 0 12px;
+}
+.rule .tag {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  color: var(--ink-faint);
+  margin-bottom: 10px;
+}
+.rule .statement {
+  font-family: var(--mincho);
+  font-weight: 700;
+  font-size: clamp(18px, 2.6vw, 22px);
+  line-height: 1.7;
+  margin: 0;
+  max-width: 34em;
+  text-wrap: balance;
+}
+
+/* ── 注意ブロック ────────────────────── */
+.caution {
+  background: var(--verm-wash);
+  border-left: 3px solid var(--vermilion);
+  padding: 20px 22px;
+  margin: 8px 0 20px;
+}
+.caution .tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--vermilion);
+  display: block;
+  margin-bottom: 8px;
+}
+.caution p { margin: 0 0 10px; font-size: 15px; }
+.caution p:last-child { margin-bottom: 0; }
+
+/* ── 判定ブロック ────────────────────── */
+.verdict {
+  border: 1px solid var(--rule);
+  background: var(--card);
+  padding: 24px 26px;
+  margin-top: 8px;
+}
+.verdict .q {
+  font-family: var(--mincho);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.6;
+  margin: 0 0 18px;
+  text-wrap: balance;
+}
+.verdict dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px 16px; margin: 0; }
+.verdict dt {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: .06em;
+  padding-top: 4px;
+  white-space: nowrap;
+}
+.verdict dt.yes { color: var(--vermilion); }
+.verdict dt.no { color: var(--moss); }
+.verdict dd { margin: 0; font-size: 15px; color: var(--ink-soft); }
+
+/* ── 迷子の対応表 ────────────────────── */
+.lost td:first-child { color: var(--ink); width: 42%; }
+.lost td:last-child { color: var(--ink-soft); }
+
+footer {
+  margin-top: 72px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  font-size: 13.5px;
+  color: var(--ink-faint);
+}
+footer p { max-width: 44em; margin: 0 0 6px; }
+
+@media (max-width: 860px) {
+  .shell { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 0 22px 90px; }
+  .toc {
+    position: static;
+    max-height: none;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+    padding: 40px 0 24px;
+  }
+  .toc nav { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0 24px; }
+  main { padding-top: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+
+<div class="shell">
+
+  <aside class="toc">
+    <div class="mark">目次</div>
+    <nav>
+      <a href="#purpose">これは何のためにあるか</a>
+      <a href="#quick">早見表</a>
+      <a href="#scenarios">ケース別の対処</a>
+      <a href="#who">分担</a>
+      <a href="#structure">構造</a>
+      <a href="#flow">案件の進め方</a>
+      <a href="#revisit">過去の相談に戻る</a>
+      <a href="#private">private/ の扱い</a>
+      <a href="#modes">モードの使い分け</a>
+      <a href="#repo">別リポを作る判定</a>
+      <a href="#casemd">CASE.md の書き方</a>
+      <a href="#layers">ルールの階層</a>
+      <a href="#review">見直し予定</a>
+    </nav>
+  </aside>
+
+  <main>
+
+    <div class="masthead">
+      <div class="eyebrow">agent-casebook</div>
+      <h1>運用マニュアル</h1>
+      <p>Claude（チャット / Cowork / Code）での相談と作業を、案件単位で 1 箇所に溜めるための手順書。ローカルの個人利用が前提で、チームへの共有展開は想定しない。</p>
+    </div>
+
+    <section id="purpose">
+      <h2>これは何のためにあるか</h2>
+      <p class="lede">解決したいのは次の 3 つ。これが同じ場所で解けないときに迷子になる。</p>
+      <div class="scroller">
+        <table class="lost">
+          <thead>
+            <tr><th>困ること</th><th>答えの在処</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>あの作業、どこでいつ相談したっけ</td>
+              <td><code>CASE.md</code> の見出しが日付とモード（<code>[Code]</code> / <code>[チャット]</code> / <code>[Cowork]</code>）になっている</td>
+            </tr>
+            <tr>
+              <td>成果物どこだっけ</td>
+              <td><code>CASE.md</code> と同じディレクトリの中</td>
+            </tr>
+            <tr>
+              <td>以前決めた内容から仕様変更したい</td>
+              <td>同じ <code>CASE.md</code> に過去の判断が時系列で残っている。読ませて成果物を更新し、末尾に 1 エントリ足す</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>守るべき原則はひとつだけ</h3>
+      <p><strong>記録の単位は案件。セッションではない。</strong>同じ案件を数週間後に再訪しても、新しい場所を作らず同じ <code>CASE.md</code> に追記する。ここを崩すと、ひとつの案件が時期ごとに散って迷子が再発する。</p>
+    </section>
+
+    <section id="quick">
+      <h2>早見表</h2>
+      <p class="lede">日常的に使うのはこの 5 つ。Claude Code に日本語で頼めば、実体としては下のコマンドが走る。</p>
+      <div class="scroller">
+        <table>
+          <thead>
+            <tr><th>やりたいこと</th><th>操作</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>新しい案件を始める</td><td>何を始めるか言うだけ。<code>cases/&lt;slug&gt;/</code> は Claude が作る</td></tr>
+            <tr><td>人事・評価の案件を始める</td><td>同じ。人事・評価と伝えれば <code>private/</code> に置かれる</td></tr>
+            <tr><td>過去の案件を探す</td><td><code>grep -ril "&lt;うろ覚えの単語&gt;" cases/ private/</code></td></tr>
+            <tr><td>案件の一覧と未決事項を眺める</td><td><code>open .tmp/dashboard.html</code>（SessionStart hook と <code>/done</code> が更新する）</td></tr>
+            <tr><td>続きをやる</td><td>該当の <code>CASE.md</code> を読ませてから作業する</td></tr>
+            <tr><td>セッションを締める</td><td><code>/done &lt;slug&gt;</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="scenarios">
+      <h2>ケース別の対処</h2>
+      <p class="lede">日常で出会う 8 つの場面をどう扱うか。詳細は各節にあるが、まずここだけで動ける。</p>
+
+      <h3>新規に相談する</h3>
+      <p>何を始めるか言うだけ。<code>mkdir</code> も採番も不要で、相談だけで終わるなら何も作られない。成果物が出た時点か <code>/done</code> を打った時点で Claude が <code>cases/&lt;slug&gt;/</code> を作る。人事・評価に関わるなら、そう伝えれば <code>private/</code> に置かれる。手順は<a href="#flow">案件の進め方</a>。</p>
+
+      <h3>相談を途中で中断する</h3>
+      <p><strong>中断もセッションの終わりとして扱い、離れる前に <code>/done &lt;slug&gt;</code> を打つ。</strong>結論が出ていなくてよい。「どこまで進んだか」「次に何をするか」を未決事項に残すのが目的で、これさえあれば再開の操作は期間によらず同じになる（次項）。</p>
+      <p>急な離席で打てなかったときは、未コミットの変更が残っていれば次回起動時に「前回 /done していません」と出るので、そこで書き戻す。</p>
+
+      <h3>中断した相談から再開する</h3>
+      <p>中断時に <code>/done</code> してあれば、<strong>短期でも長期でも操作は同じ</strong>。新しいセッションで <code>CASE.md</code> を読ませて続きを頼む（<a href="#revisit">過去の相談に戻る</a>と同じ手順）。</p>
+      <p><code>/done</code> せずに中断してしまった場合だけ、期間で操作が分かれる。</p>
+      <ul>
+        <li><strong>短期（同じ端末で、当日〜数日内）</strong> — <code>claude --continue</code>（直近のセッションを再開）で中断地点から続けてよい。「セッションを再開しない」原則は記録済みの相談に戻る場合の話で、<strong>まだ何も記録していない中断セッションは対象外</strong>。戻ったら、続ける前にまず現在地を <code>/done</code> で記録しておくと二度目の中断に耐える</li>
+        <li><strong>長期（記憶が薄い、または端末が違う）</strong> — セッション履歴は当てにしない。残っているファイルと git の状態から Claude に現状を整理させ、思い出せる判断を <code>CASE.md</code> に追記してから続ける</li>
+      </ul>
+
+      <h3>過去の相談を探して、再開する</h3>
+      <p>うろ覚えの単語で探させ、<code>CASE.md</code> を読ませ、続きを頼む。3 ステップの詳細は<a href="#revisit">過去の相談に戻る</a>。新しい案件は作らず、同じ <code>CASE.md</code> の末尾に追記していく。</p>
+      <pre><code>集計クエリの案件を探して</code></pre>
+
+      <h3>過去の相談を参考にして、新規に相談する</h3>
+      <p>参考元の <code>CASE.md</code> を読ませてから、<strong>「これは新しい案件」と明示して</strong>始める。明示しないと Claude が既存案件の続きと判断し、参考元の <code>CASE.md</code> に追記されてしまう。</p>
+      <pre><code>cases/bq-sales-agg/CASE.md を読んで。
+これを参考に、新しく解約率の集計を作りたい</code></pre>
+      <p>新しい案件の <code>CASE.md</code> ヘッダの「関連」に参考元の slug を書いておくと、後から逆向きにも辿れる。</p>
+      <p>続きか新規か迷ったら判定は 1 つ: <strong>同じ成果物を更新するなら続き、別の成果物が生まれるなら新規</strong>。</p>
+
+      <h3>管理リポ外での相談をここに移行する</h3>
+      <p>すでに別の場所でやってしまった相談を取り込む。どこでやったかで 2 つに分かれる。</p>
+      <ul>
+        <li><strong>チャット / Cowork での相談</strong> — その場で「<code>CASE.md</code> 用のエントリを Markdown で出して」と言わせて手元に持ち、Code で該当案件（無ければ新規）に貼って追記する。エントリの日付は相談した日、モードは <code>[チャット]</code> / <code>[Cowork]</code> のまま書く</li>
+        <li><strong>別リポやリポ外での Code セッション</strong> — そのセッションの終わりにユーザー共通コマンド <code>/writeback &lt;slug&gt;</code> を打つ。<code>~/agent-casebook</code> を絶対パスで更新するので折り返しは要らない。コードが保守対象ならそのリポに置いたままにし、<code>CASE.md</code> にはリポ / ブランチ / PR を記録するだけ（<a href="#repo">別リポを作る判定</a>と同じ扱い）。使い捨てなら成果物ごと <code>cases/&lt;slug&gt;/</code> に移す</li>
+      </ul>
+      <p>チャットや Cowork からの移行はあくまで救済で、<a href="#modes">モードの使い分け</a>のとおり、記録したい相談は最初から Code とこのリポで始める。別リポでの作業が前提の案件は例外で、そのセッションの終わりに <code>/writeback</code> を打つのが正規の手順になる。</p>
+
+      <h3>手元のファイルを持ち込む</h3>
+      <p>相談中にこのリポの外にあるファイルを参照したら、Claude がその場で置き場所を提案する。<strong>基本は <code>cases/&lt;slug&gt;/</code> への移動</strong>で、元の場所には残さない。シンボリックリンクは git がリンク先のパスしか記録せず <code>grep -r</code> も辿らないため、二重管理の解消にならない。移動は元の場所からファイルが消えるので、許可を得てから行う。</p>
+      <ul>
+        <li><strong>相談のために用意した資料</strong>（仕様書・下書き・スクリーンショット） — <code>cases/&lt;slug&gt;/</code> へ移動</li>
+        <li><strong>別のツールが固定パスで読む設定ファイル</strong>（<code>~/.claude/commands/writeback.md</code> など） — 実体を <code>cases/&lt;slug&gt;/</code> に置き、元の場所にリンクを張る。リンクを認めるのはこのケースだけ</li>
+        <li><strong>保守対象の別リポに属するファイル</strong> — <code>CASE.md</code> にパス・ブランチ・PR を記録するだけ</li>
+        <li><strong>動画や大きなログ、他人の管理物</strong> — <code>CASE.md</code> に所在を記録するだけ</li>
+        <li><strong>人事情報を含むもの</strong> — 上のいずれでも置き先は <code>private/&lt;slug&gt;/</code></li>
+      </ul>
+
+      <h3>投稿記事を書く</h3>
+      <p>「〜の記事を書きたい」と言えば、Claude が <code>article-&lt;題材&gt;</code> の案件を分類「記事」で起票する。<strong>記事 1 本につき 1 案件</strong>で、相談の管理フォルダを別に作ったり、その下に記事ごとのフォルダを切ったりはしない（<a href="#structure">構造</a>の「1 階層」の原則）。記事の一覧は <code>INDEX.md</code> の分類「記事」か <code>ls cases/ | grep article-</code> で得る。</p>
+      <ul>
+        <li><strong>本文の下書き</strong> — <code>article.md</code>。冒頭に読み手・目標規定文・投稿先を書く</li>
+        <li><strong>壁打ちログ</strong> — <code>chat-log/YYYY-MM-DD-&lt;ツール名&gt;.md</code>。出典として残し、書き換えない</li>
+        <li><strong>投稿先と投稿日</strong> — 投稿したら <code>CASE.md</code> の「関連」とエントリに記録する</li>
+        <li><strong>記事をまたいで使うもの</strong>（投稿先ごとの書式、読み手の想定、過去記事の一覧） — 案件ではなく <code>docs/</code> に置く</li>
+      </ul>
+    </section>
+
+    <section id="who">
+      <h2>分担</h2>
+      <p class="lede">ディレクトリの作成、slug の決定、成果物の保存先はすべて Claude が行う。<code>mkdir</code> も採番も不要。</p>
+
+      <div class="yours">
+        <span class="tag">あなたがやること</span>
+        <ol>
+          <li>何を始めるか言う</li>
+          <li>人事・評価の案件なら、そう伝える</li>
+          <li>終わりに <code>/done</code> を打つ</li>
+        </ol>
+        <p>加えて<strong>判断そのもの</strong>（何を選び、なぜそうするか）はあなたが決める。Claude はそれを <code>CASE.md</code> に書き留めるだけ。</p>
+      </div>
+
+      <h3>操作ごとの内訳</h3>
+      <div class="scroller">
+        <table class="who">
+          <thead>
+            <tr><th>操作</th><th>あなた</th><th>Claude</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>案件の特定</td><td class="none">—</td><td><code>cases/</code> と <code>private/</code> を探し、既存の続きか新規かを判断する</td></tr>
+            <tr><td>slug の決定</td><td class="none">—</td><td>案件名から決める（英小文字・ハイフン区切り、採番なし）</td></tr>
+            <tr><td>ディレクトリと <code>CASE.md</code> の作成</td><td class="none">—</td><td>成果物が出た時点、または <code>/done</code> 実行時に作る</td></tr>
+            <tr><td><code>private/</code> に置くかの判断</td><td>人事・評価だと伝える</td><td>伝えられたら <code>private/</code> の下に置く</td></tr>
+            <tr><td>成果物の保存先</td><td class="none">—</td><td><code>CASE.md</code> と同じディレクトリに置く</td></tr>
+            <tr><td><code>CASE.md</code> への追記</td><td><code>/done</code> を打つ</td><td>末尾にエントリを追記する</td></tr>
+            <tr><td><code>INDEX.md</code> の更新</td><td class="none">—</td><td><code>/done</code> で状態と更新日を直す</td></tr>
+            <tr><td>コミット</td><td class="none">—</td><td><code>/done</code> で行う</td></tr>
+            <tr><td>push</td><td>都度判断する</td><td>行わない</td></tr>
+            <tr><td>判断の中身</td><td>決める</td><td>理由と見送った案を書き留める</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="structure">
+      <h2>構造</h2>
+      <p class="lede">器は <code>INDEX.md</code> と <code>cases/</code> の 2 つだけ。器を増やすと一元管理という目的に反する。</p>
+      <pre><code>INDEX.md            案件一覧（push する）
+cases/&lt;slug&gt;/       案件ごとの作業場（push する）
+    CASE.md         メタ情報 + セッションごとの時系列ログ
+    &lt;成果物&gt;        クエリ・文書・検証コードなど
+private/            人事情報など push しない案件。.gitignore 済み
+    INDEX.md
+    &lt;slug&gt;/CASE.md
+docs/               案件をまたいで参照する設計メモとこのマニュアル
+.claude/commands/   カスタムコマンド（/done, /doc-check）
+~/.claude/commands/writeback.md
+                    ユーザー共通コマンド /writeback（templates/writeback.md を置く）</code></pre>
+      <p>ディレクトリ名は slug のみで、<strong>番号を振らない</strong>。採番を待つ手間がそのまま「まず起票」の摩擦になり、記録しなくなる原因になるため。</p>
+      <p><code>cases/</code> は <strong>1 階層</strong>で、分類ごとのフォルダ（例: <code>cases/articles/&lt;slug&gt;/</code>）は作らない。hook と <code>/done</code> が <code>cases/*/CASE.md</code> の 1 階層だけを探すため、入れ子にした案件は起動時の表示と <code>/done</code> 漏れの検知から外れる。案件の種類は <code>INDEX.md</code> の分類列と slug の接頭語で表し、<code>ls cases/ | grep article-</code> のように絞る。</p>
+      <p>決まっている接頭語は次のとおり。<code>app-</code> のような製品名・サービス名は対象の名前であって、接頭語の規則ではない。</p>
+      <div class="scroller">
+        <table>
+          <thead>
+            <tr><th>接頭語</th><th>分類</th><th>使い方</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>article-</code></td><td>記事</td><td>社内などへ投稿する記事。記事 1 本につき 1 案件とし、題材を続ける（例: <code>article-agile-estimation</code>）。本文の下書きは <code>article.md</code>、執筆前に AI と壁打ちしたログは <code>chat-log/</code> に <code>YYYY-MM-DD-&lt;ツール名&gt;.md</code> で置く。投稿先の書式など記事をまたいで使うものは <code>docs/</code> に置く</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>GitHub issue は使わない。issue の価値は共有・状態管理・通知だが、ローカルの個人利用ではどれも要らない。</p>
+    </section>
+
+    <section id="flow">
+      <h2>案件の進め方</h2>
+      <p class="lede">相談で終わるものも作業になるものも、入口は同じ。判定はしない。</p>
+      <div class="steps">
+
+        <div class="step">
+          <div class="n">1</div>
+          <div>
+            <span class="actor you">あなた</span>
+            <h3>何を始めるか言う</h3>
+            <p><strong>ディレクトリと <code>CASE.md</code> は Claude が作る。</strong><code>mkdir</code> も採番も不要。Claude が <code>cases/</code> と <code>private/</code> を探し、既存案件なら続き、無ければ新規として扱う。人事・評価に関わる案件は <code>private/</code> の下に置かれる。</p>
+            <p>相談だけで終わりそうなら、この時点では何も作られない。成果物が出た時点、または <code>/done</code> を打った時点で作られる。</p>
+            <p>Code の起動時には進行中の案件が自動で表示される（下記）。既存案件の続きかどうかは、これを見れば判断できる。</p>
+            <pre><code>■ 進行中の案件
+    casebook-ops  [運用]      2026-09-09
+    bq-sales-agg  [BigQuery]  2026-08-14  ← 26 日更新なし
+
+■ 終了時は /done &lt;slug&gt;</code></pre>
+            <pre><code># 売上集計クエリ
+
+分類: BigQuery
+状態: 進行中
+成果物: query.sql
+関連: Jira XXX-123</code></pre>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="n">2</div>
+          <div>
+            <span class="actor you">あなた</span> <span class="actor ai">Claude</span>
+            <h3>作業して、成果物を同じ場所に置く</h3>
+            <p>クエリ・文書・検証コードはすべて <code>CASE.md</code> と同じディレクトリに置く。「成果物どこだっけ」を構造で解決するのが狙い。</p>
+            <p>保存先が必要になった時点で <code>cases/&lt;slug&gt;/</code> が作られる。保存場所を指定する必要はない。</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="n">3</div>
+          <div>
+            <span class="actor you">あなた</span> <span class="actor ai">Claude</span>
+            <h3>セッションの終わりに <code>/done</code> を打つ</h3>
+            <p>あなたが打つのはこの 1 行だけ。あとは Claude が <code>CASE.md</code> の末尾にエントリを追記し、メタ情報と <code>INDEX.md</code> を更新してコミットまで行う。push はしない。</p>
+            <pre><code>/done bq-sales-agg</code></pre>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="n">4</div>
+          <div>
+            <span class="actor you">あなた</span> <span class="actor ai">Claude</span>
+            <h3>数週間後に戻ってくる</h3>
+            <p>うろ覚えの単語を言えば Claude が探して <code>CASE.md</code> を読む。<strong>新しい案件は作らない。</strong>同じ <code>CASE.md</code> の末尾に追記していく。</p>
+            <pre><code>grep -ril "集計" cases/ private/</code></pre>
+            <p>全体を眺めたいときは <code>open .tmp/dashboard.html</code>。Claude Code のセッション一覧（実行中 / 未締め / 締め済み。<code>~/.claude/projects</code> の記録と hook の登録から。未締めから「再開」できる）、案件一覧（状態・最終更新・停滞）、各案件の最新エントリの未決事項、直近 30 日の時系列、<code>INDEX.md</code> との整合、本文検索を 1 ページに出し、slug を押せば <code>CASE.md</code> をページ内で読める。「MacDown」は <code>x-macdown://</code> スキームで MacDown 3000 を直接開く。「Code」は Terminal で <code>claude</code> を起動して <code>CASE.md</code> を読ませ、「Term」は Terminal を案件ディレクトリで開く。これらは <code>casebook://</code> スキームを <code>~/Applications/Casebook Launcher.app</code> が受けて動く（<code>tools/launcher/build.sh</code> で作る。受けるのは slug と動作名だけで、コマンド文字列は受けない）。<code>tools/dashboard.py</code> が <code>CASE.md</code> から生成し、hook と <code>/done</code> が更新する。読むだけで、書くのは <code>/done</code> のまま。</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="revisit">
+      <h2>過去の相談に戻る</h2>
+      <p class="lede">数週間前の相談の続きも、この仕組み自体に問題が出たときも、やり方は同じ。</p>
+
+      <div class="rule">
+        <span class="tag">原則</span>
+        <p class="statement">セッションを再開しない。新しいセッションを開いて CASE.md を読ませる。</p>
+      </div>
+
+      <h3>言うことは 3 つだけ</h3>
+      <div class="steps">
+
+        <div class="step">
+          <div class="n">1</div>
+          <div>
+            <span class="actor you">あなた</span> <span class="actor ai">Claude</span>
+            <h3>うろ覚えの単語で探させる</h3>
+            <p>案件名を正確に覚えている必要はない。Claude が <code>cases/</code> と <code>private/</code> を横断して探す。</p>
+            <pre><code>集計クエリの案件を探して</code></pre>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="n">2</div>
+          <div>
+            <span class="actor ai">Claude</span>
+            <h3>CASE.md を読ませる</h3>
+            <p>過去に何を決めたか、何を却下したか、何が未決かがこの 1 ファイルに揃っている。</p>
+            <pre><code>cases/bq-sales-agg/CASE.md を読んで</code></pre>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="n">3</div>
+          <div>
+            <span class="actor you">あなた</span> <span class="actor ai">Claude</span>
+            <h3>続きを頼み、終わりに <code>/done</code></h3>
+            <p>成果物は同じディレクトリにあるので、その場で更新できる。新しい案件は作らない。</p>
+            <pre><code>税込に変えたいので query.sql を直して
+…
+/done bq-sales-agg</code></pre>
+          </div>
+        </div>
+
+      </div>
+
+      <h3>なぜセッションを再開しないのか</h3>
+      <ul>
+        <li><strong>保持が保証されない。</strong>端末を変えれば失われる</li>
+        <li><strong>チャットと Cowork の履歴は Code から辿れない。</strong>戻り方がモードごとに変わってしまう</li>
+        <li><strong>重い。</strong>長いセッションを丸ごと復元すると無関係な文脈も全部載る。数時間の議論が 2 MB になることもある。<code>CASE.md</code> を読ませた方が速く、必要な部分だけが載る</li>
+        <li><strong>必要な情報は <code>CASE.md</code> にある。</strong>判断と見送った案を残しているのは、まさにこのためである</li>
+      </ul>
+
+      <h3>この仕組み自体に問題が出たとき</h3>
+      <p>運用の不具合も案件として扱う。運用を扱う案件（例: <code>cases/casebook-ops/CASE.md</code>）に判断の理由と未決事項が並んでいるので、新しいセッションで読ませてから症状を伝える。</p>
+      <pre><code>cases/casebook-ops/CASE.md を読んで。hook が起動時に表示されなかった</code></pre>
+      <p>これで足りるなら、それ自体がこの仕組みが機能している証拠になる。足りなければ <code>CASE.md</code> に書くべき情報が漏れていたということなので、<strong>その漏れも追記する</strong>。</p>
+    </section>
+
+    <section id="private">
+      <h2>private/ の扱い</h2>
+      <p class="lede">人事情報・評価は <code>private/</code> に置く。<code>.gitignore</code> されているのでリモートには出ない。</p>
+
+      <div class="caution">
+        <span class="tag">注意</span>
+        <p><strong>ファイル名ではなく置き場所で判断する。</strong>命名規則で分けると、名前を間違えた 1 件が漏れる。ディレクトリを間違えなければ漏れない。</p>
+        <p>会社 Org へリポジトリを移すと、Private のままでも Org の owner / admin は中身を閲覧できる。<code>private/</code> はその保険にもなっている。</p>
+      </div>
+
+      <h3>検索は分断されない</h3>
+      <p><code>.gitignore</code> は git の話なので、<code>grep</code> は <code>cases/</code> と <code>private/</code> を横断する。人事案件を別リポに切り出すとこれができなくなるため、同一リポ内に置いている。</p>
+
+      <h3>引き換えに失うもの</h3>
+      <ul>
+        <li><strong>バックアップが無い。</strong>push しない以上、Time Machine 等に依存する</li>
+        <li>案件名を漏らさないため <code>INDEX.md</code> は 2 つに分けている（<code>private/INDEX.md</code> 側も push されない）</li>
+      </ul>
+    </section>
+
+    <section id="modes">
+      <h2>モードの使い分け</h2>
+      <p class="lede">記録が残るのは Code だけ。ここを間違えると、解決したはずの迷子が戻ってくる。</p>
+
+      <div class="rule">
+        <span class="tag">原則</span>
+        <p class="statement">記録したい相談は Code でやる。チャットと Cowork は壁打ちに限り、結論が出そうになったら Code に移す。</p>
+      </div>
+
+      <h3>モードごとにできること</h3>
+      <div class="scroller">
+        <table>
+          <thead>
+            <tr><th>モード</th><th><code>CASE.md</code></th><th><code>/done</code></th><th>hook</th><th>忘れたら</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Code</td><td>書ける</td><td>使える</td><td>効く</td><td>次回起動時に「前回 /done していません」と出る</td></tr>
+            <tr><td>Cowork</td><td>書ける</td><td>コマンドとしては使えない</td><td>効かない</td><td>気づく手がかりなし</td></tr>
+            <tr><td>チャット</td><td class="none">書けない</td><td class="none">使えない</td><td class="none">効かない</td><td><strong>記録ゼロ。手がかりなし</strong></td></tr>
+            <tr><td>別リポ / リポ外で開いた Code</td><td>書ける</td><td>代わりに <code>/writeback &lt;slug&gt;</code></td><td>効かない</td><td>気づく手がかりなし</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>それでもチャットや Cowork を使うとき</h3>
+      <ul>
+        <li><strong>Cowork は実質使える。</strong><code>/done</code> の実体は <code>.claude/commands/done.md</code> というただの Markdown なので、「このファイルの手順どおりに記録して」と言えば同じ結果になる</li>
+        <li><strong>チャットは折り返す。</strong>相談の終わりに「<code>CASE.md</code> 用のエントリを Markdown で出して」と言わせて手元に持ち、次に Code を開いたときに貼る</li>
+        <li><strong>別リポやリポ外で開いた Code は <code>/writeback &lt;slug&gt;</code>。</strong>ユーザー共通コマンド（<code>templates/writeback.md</code> を <code>~/.claude/commands/writeback.md</code> に置く）なので、どのディレクトリで開いた Code でも使える。<code>/done</code> との違いは、エントリに <code>作業場所:</code> の行が付くことと、コミット対象がその案件のファイルだけに絞られること。作業中のリポには何も書かない</li>
+      </ul>
+
+      <div class="caution">
+        <span class="tag">注意</span>
+        <p>hook は Claude Code だけの機能なので、他モードで進めた分は Code 側から検知できません。<code>SessionStart</code> が「14 日以上更新なし」を出すので気づきやすくはなりますが、<strong>検知ではありません</strong>。</p>
+      </div>
+    </section>
+
+    <section id="repo">
+      <h2>別リポを作る判定</h2>
+      <p class="lede">判定が必要な場面はここだけ。問いは 1 つ。</p>
+      <div class="verdict">
+        <p class="q">そのコードを半年後も動かし続けるか（保守対象か）</p>
+        <dl>
+          <dt class="yes">はい</dt>
+          <dd>対象リポを別に作る。<code>CASE.md</code> には対象リポ / ブランチ / PR を記録するだけにして、コードの説明は PR 側に書く（二重に書かない）</dd>
+          <dt class="no">いいえ</dt>
+          <dd><code>cases/&lt;slug&gt;/</code> の中で完結させる。技術検証の使い捨てコードもここに置く</dd>
+        </dl>
+      </div>
+      <p>「コードがあるかどうか」では判定しない。検証用の使い捨てコードは、コードがあってもリポを作る理由にならない。</p>
+    </section>
+
+    <section id="casemd">
+      <h2>CASE.md の書き方</h2>
+      <p class="lede">末尾に追記する。過去のエントリは書き換えない。</p>
+      <pre><code>---
+
+## 2026-10-15 [チャット] 税込対応の仕様変更
+
+### やったこと
+- query.sql を税抜 → 税込に変更
+
+### 判断
+- 端数は切り捨て。経理の既存処理に合わせた
+- 却下: 四捨五入（既存レポートと差分が出る）
+
+### 未決事項
+- やる: 過去分の再集計。自分、次回セッション
+- 確かめる: 経理側の丸め処理が本当に切り捨てか。経理担当待ち</code></pre>
+      <h3>3 つの節の役割</h3>
+      <ul>
+        <li><strong>やったこと</strong> — 変更したファイルと、それが何を実現したか</li>
+        <li><strong>判断</strong> — 何を選び、なぜそうしたか。<strong>見送った案も残す</strong>。仕様変更のときに一番効くのがここ</li>
+        <li><strong>未決事項</strong> — この案件を終えるために、まだ誰かが「決める・やる・確かめる」必要があること。前回分を閉じたうえで全量を書き直す。無ければ「なし」と書く</li>
+      </ul>
+      <p>書く量の基準は、<strong>数週間後にこの 3 節だけを読んで再開できるか</strong>。それ以上は書かなくてよい。</p>
+      <h3>未決事項の定義と閉じ方</h3>
+      <p>未決事項は 3 種類だけ。<strong>決める</strong>（選択肢があり、まだ選んでいない）、<strong>やる</strong>（作業として残っている）、<strong>確かめる</strong>（前提にしたが裏を取っておらず、結果次第で成果物が変わる）。「待ち」は種類ではなく状態で、誰を待っているかを添える。1 件ごとに種類・担当・次の動き（日付か条件）を書く。</p>
+      <p>閉じ方も 3 つだけ。<strong>やった</strong>（やったこと節に結果を書く）、<strong>やらない</strong>（判断節に理由を書く）、<strong>残す</strong>（書き直して次のエントリへ）。「やる」と決めただけでは閉じない。「いつかやる」のように契機が書けないものは「やらない」で閉じ、必要になったらそのとき未決に戻す。<code>/done</code> は前回の未決を 1 件ずつ出し、セッションの内容から推定を添えて「やった / やらない / 残す」を聞く。</p>
+      <p>未決に<strong>含めない</strong>ものは 4 つ。線引きは「それが終わっても、また同じ作業が来るか」。</p>
+      <ul>
+        <li><strong>定期作業</strong>（月次・週次の集計など） — ヘッダの <code>定期作業</code> 行に書き、明示的に管理を頼まれたときだけ未決に出す。初回や、繰り返しの形を変える変更は単発なので未決に書く</li>
+        <li><strong>結果で成果物が変わらない未確認事項</strong> — 判断節に「確認せず進めた」と理由を書いて閉じる</li>
+        <li><strong>既知の限界、受け入れた制約</strong> — 判断節に書く</li>
+        <li><strong>他案件の話</strong> — その案件の <code>CASE.md</code> に書き、こちらは「〜案件へ移した」で閉じる</li>
+      </ul>
+      <p>「前エントリの未決は継続」のような参照は書かない。最新エントリの未決事項が常に全量で、ヘッダの <code>状態</code> はそこから導く（未決がなく成果物を渡し終えたら完了、他者待ちだけなら保留、それ以外は進行中）。</p>
+      <h3>セッションの記録に頼らない</h3>
+      <p>セッションの会話履歴には頼らない。保持は保証されず、端末を変えれば失われる。チャットと Cowork の履歴は Code から辿れない。だから結論は <code>CASE.md</code> に自分の言葉で書く。戻り方は<a href="#revisit">過去の相談に戻る</a>を参照。</p>
+    </section>
+
+    <section id="layers">
+      <h2>ルールの階層</h2>
+      <p class="lede">Code は上位から順に読み込む。同じ事柄を 2 箇所に書くと矛盾するので、役割を分ける。</p>
+      <div class="scroller">
+        <table>
+          <thead>
+            <tr><th>階層</th><th>置くもの</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>~/.claude/CLAUDE.md</code></td><td>全リポ共通の作法・原則（応答は日本語、外向きの操作は事前確認）</td></tr>
+            <tr><td><code>agent-casebook/CLAUDE.md</code></td><td>このリポの運用手順（<code>cases/</code> の切り方、<code>/done</code>、<code>private/</code> の扱い）</td></tr>
+            <tr><td>作業リポの <code>CLAUDE.md</code></td><td>技術規約（言語・テスト・ビルド・コーディング規約）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><code>CLAUDE.md</code> と Skill（<code>.claude/commands/</code>）の分担は「<strong>制約は <code>CLAUDE.md</code>、手順は Skill</strong>」。<code>CLAUDE.md</code> は毎ターン全文が載るので常時効かせる制約だけを置き、Skill は呼ばれたときだけ載るので長い手順を置く。</p>
+    </section>
+
+    <section id="review">
+      <h2>見直し予定</h2>
+      <p class="lede">この運用は 2026-09-09 に始め、2026-10-07 に 1 か月分（12 案件・30 エントリ）を見直した。</p>
+      <ul>
+        <li><strong>3 節の書式は維持する。</strong><code>/done</code> の不具合追跡が 4 セッションにまたがり、<code>CASE.md</code> だけで続けられた。記録漏れは 30 エントリ中 1 件。ただし「見送った案」を書いていない案件が 11 件中 5 件あり、仕様変更のときに効く節なので意識して残す</li>
+        <li><strong><code>INDEX.md</code> の自動生成は見送る。</strong>12 件で閾値の 10 件を超えたが、手書きの負担は <code>/done</code> ごとに 1 行で、進行中の一覧は hook が <code>CASE.md</code> から生成している。「完了（〜へ統合）」のような注記も手書きだから残せる。負担が出たら再検討する</li>
+        <li><strong>合わなかった点は引き続き運用を扱う案件の <code>CASE.md</code> に追記する。</strong>それ自体が次の改善材料になる</li>
+        <li>会社 Org への移行タイミングは未決</li>
+        <li><strong>hook は 2 つとも継続する。</strong><code>SessionStart</code> が進行中案件と前回の <code>/done</code> 漏れを表示し、<code>SessionEnd</code> が「未コミットの変更があるのに <code>CASE.md</code> が未更新」を検知して次回に持ち越す。1 か月で煩わしさの記録はない</li>
+        <li><code>Stop</code> hook は使わない。応答を終えるたびに発火する仕様で「セッションの終わり」を判定できないため、目的に合わない</li>
+        <li><code>private/</code> の <code>git add</code> を止める PreToolUse hook は作っていない。<code>.gitignore</code> で足りるため（<code>git add -f</code> を自分で叩かない限り不要）</li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>設計の経緯と見送った案は <code>docs/000-design.md</code> にある。</p>
+      <p>GitHub issue #1 は、issue ベース運用をやめる前の記録としてクローズ状態で残している。</p>
+    </footer>
+
+  </main>
+</div>

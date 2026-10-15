@@ -1,0 +1,17 @@
+# 人事情報など、リモートに出さないもの
+private/
+
+# hook が残す一時ファイル
+.claude/pending
+
+# 個人の許可設定
+.claude/settings.local.json
+
+# dashboard.py と Launcher が生成するもの（private の案件も含むため追跡しない）
+.tmp/
+
+# macOS
+.DS_Store
+
+# Office のロックファイル
+~$*
