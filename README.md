@@ -10,7 +10,8 @@ AI コーディングエージェント（現状は Claude Code）との相談�
 
 | 場所 | 役割 |
 |---|---|
-| `CLAUDE.md` | このリポでの運用ルール。Claude Code が毎回読む |
+| `CLAUDE.md` | 運用ルール（毎回効かせる制約だけ）。Claude Code が毎回読む。解説は `docs/manual.html` |
+| `.claude/rules/` | 利用側の固有の規則を置く場所（更新で上書きされない）。初期状態では空 |
 | `cases/<slug>/CASE.md` | 案件ごとの記録。メタ情報と、セッションごとの「やったこと / 判断 / 未決事項」 |
 | `INDEX.md` | 案件一覧 |
 | `private/` | 人事情報など push しない案件（gitignore 済み） |

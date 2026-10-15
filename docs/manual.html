@@ -565,7 +565,10 @@ private/            人事情報など push しない案件。.gitignore 済み
     INDEX.md
     &lt;slug&gt;/CASE.md
 docs/               案件をまたいで参照する設計メモとこのマニュアル
+.claude/hooks/      SessionStart / SessionEnd hook（session-start.local.sh があれば利用側の表示を足す）
+.claude/rules/      利用側の固有の規則（CLAUDE.md と同じ優先度で毎回読まれ、仕組みの更新で上書きされない）
 .claude/commands/   カスタムコマンド（/done, /doc-check）
+tools/              ダッシュボード生成（dashboard.py）と Launcher（launcher/）
 ~/.claude/commands/writeback.md
                     ユーザー共通コマンド /writeback（templates/writeback.md を置く）</code></pre>
       <p>ディレクトリ名は slug のみで、<strong>番号を振らない</strong>。採番を待つ手間がそのまま「まず起票」の摩擦になり、記録しなくなる原因になるため。</p>
