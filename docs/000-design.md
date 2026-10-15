@@ -97,16 +97,25 @@
 - 会社 Org への移行タイミング
 - `.claude/rules/` を使うか（現時点では規模が小さいので保留）
 
-## 7. 現在の構成
+## 7. 現在の構成（2026-10-15 時点）
 
 ```
-INDEX.md            案件一覧（push する）
-cases/<slug>/       案件ごとの作業場（push する）
-    CASE.md         メタ情報 + セッションごとの時系列ログ
+CLAUDE.md           毎回効かせる制約だけ（解説はマニュアル、固有規則は .claude/rules/）
+INDEX.md            案件一覧
+cases/<slug>/       案件ごとの作業場
+    CASE.md         メタ情報 + セッションごとの時系列ログ（やったこと / 判断 / 未決事項）
     <成果物>
 private/            人事情報など push しない案件。.gitignore 済み
-docs/NNN-slug.md    案件をまたいで参照する設計メモ
-.claude/commands/   /done
+docs/               このマニュアルと設計メモ
+.claude/settings.json   hook の登録
+.claude/hooks/      SessionStart（進行中の案件と前回の記録漏れを表示、ダッシュボード更新、セッション登録）
+                    SessionEnd（記録漏れの検知、セッション登録の削除）
+                    session-start.local.sh があれば利用側の表示を足す（同期対象外）
+.claude/rules/      利用側の固有の規則（同期対象外）
+.claude/commands/   /done（tools/casebook.py を呼び、判断と文章だけを担う）、/doc-check
+tools/              dashboard.py（単一 HTML のダッシュボード）、casebook.py（/done の決定的処理）、
+                    launcher/（casebook:// を受ける macOS アプリ）、check-public.sh（公開前点検）
+templates/          ~/.claude/CLAUDE.md と /writeback の雛形
 ```
 
-GitHub issue #1 は、issue ベース運用をやめる前の記録としてクローズ状態で残している。
+仕組みの正はこのリポで、日々使うリポは取り込むだけ（`docs/001-maintenance.md`）。

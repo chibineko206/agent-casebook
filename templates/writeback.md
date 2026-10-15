@@ -1,54 +1,44 @@
 ---
 description: 別リポやリポ外で開いた Code セッションの結果を ~/agent-casebook の案件 CASE.md に書き戻す
 argument-hint: <案件slug>
-allowed-tools: Bash(git:*), Bash(ls:*), Bash(cp:*), Bash(mkdir:*), Read, Write, Edit
+allowed-tools: Bash(python3:*), Bash(git:*), Bash(ls:*), Bash(cp:*), Bash(mv:*), Read, Write, Edit
 ---
 
 このセッションの結果を `~/agent-casebook` の案件 `$1` に書き戻す。
-`~/agent-casebook` の `/done` と同じ記録を、**別のディレクトリで開いた Code セッションから**残すためのコマンド。
-作業中のリポジトリには何も書かない。
+`/done` と同じ記録を、**別のディレクトリで開いた Code セッションから**残すためのコマンド。作業中のリポジトリには何も書かない。
+決定的な処理は記録リポ側の `tools/casebook.py` が行う。スクリプトは自分の置き場所から記録リポを見つけるので、
+どのディレクトリから呼んでも `~/agent-casebook` に対して動く。
 
-引数が空の場合は、このセッションの内容から該当する案件を下の一覧で推定し、
-一意に決まらなければユーザーに確認してから進める。
+（記録リポの場所が違う場合は、このファイルの `~/agent-casebook` を自分の場所に書き換えて `~/.claude/commands/writeback.md` に置く）
 
-## 1. 案件を特定する
+## 1. 現状を出す
 
 ```
-!`cd ~/agent-casebook && ls cases/ private/ 2>/dev/null`
-!`cd ~/agent-casebook && git status --short && echo "---" && git log --oneline -3`
+python3 ~/agent-casebook/tools/casebook.py start $1
 ```
 
-- 既存の案件なら `~/agent-casebook/cases/<slug>/CASE.md`（または `private/<slug>/CASE.md`）を読む
-- **新規案件なら**ディレクトリと `CASE.md` を作る。slug は英小文字・ハイフン区切り、採番しない
-- **人事情報・評価に関わる案件は `private/` に置く**（`private/` は `.gitignore` されている）
+案件の所在、ヘッダ、最新エントリ、前回の未決事項、記録リポの git の状態が出る。
 
-新規 `CASE.md` のヘッダ:
-
-```markdown
-# <案件名>
-
-分類: <運用 / 調査 / 技術検証 / ドキュメント / 学習 など>
-状態: 進行中
-成果物: <ファイル名。無ければ「なし」>
-関連: <Jira キー / 他案件 / なし>
-```
+- 引数が空のときは `start` を引数なしで実行し、一覧からこのセッションの内容に合う案件を推定する。一意に決まらなければユーザーに確認する
+- 案件が無ければ新規。`python3 ~/agent-casebook/tools/casebook.py new <slug> --title "<案件名>" --category <分類> [--private] [--artifacts "<成果物>"] [--related "<関連>"]`
 
 ## 2. 成果物の置き場所を決める
 
-このセッションで作ったファイルは、`~/agent-casebook/CLAUDE.md` の「リポジトリ外のファイルを参照したら」の表で判定する。
+このセッションで作ったファイルは、記録リポの `CLAUDE.md` の「リポジトリ外のファイルを参照したとき」の表で判定する。
 
-- 作業中のリポジトリが保守対象なら、ファイルはそこに置いたまま。`CASE.md` にリポ / ブランチ / PR を記録する
-- 使い捨て（検証コード・下書き・クエリなど）なら `~/agent-casebook/cases/<slug>/` へ移す。
-  元の場所から消すことになるので、移す前にユーザーの許可を得る
+- 作業中のリポジトリが保守対象なら、ファイルは動かさず、エントリに対象リポ / ブランチ / PR を書く
+- 使い捨て（検証コード・下書き・クエリなど）なら `~/agent-casebook/cases/<slug>/` へ移す。移動は元の場所からファイルが消えるので、許可を得てから行う
 
-## 3. CASE.md にエントリを追記する
+## 3. 前回の未決事項を閉じる（問答）
 
-**末尾に追記する。過去のエントリは書き換えない。**
-セッション中の実際の作業に基づいて書き、推測で埋めない。
+`start` が出した前回の未決事項を 1 件ずつ列挙し、「やった / やらない / 残す」を推定して添え、ユーザーに確認する。
+閉じ方と未決事項の定義は記録リポの `.claude/commands/done.md` の 3 節・4 節と同じ。
+
+## 4. エントリを書く
+
+`~/agent-casebook/.tmp/writeback-entry.md` に、次の形で書く。セッション中の実際の作業に基づき、推測で埋めない。
 
 ```markdown
----
-
 ## <YYYY-MM-DD> [Code] <このセッションの要約>
 
 作業場所: `<リポジトリ名またはディレクトリのパス>`
@@ -59,30 +49,19 @@ allowed-tools: Bash(git:*), Bash(ls:*), Bash(cp:*), Bash(mkdir:*), Read, Write, 
 ```
 
 - `作業場所` は `/done` のエントリには無い行。別の場所で作業した記録として必ず書く
-- **やったこと**: 変更したファイル（作業リポ側はパスとブランチ）と、それが何を実現したか
-- **判断**: 選択肢があった箇所で何を選び、なぜそうしたか。**見送った案も残す**
-- **未決事項**: 次回に送ったもの。無ければ「なし」と書く
+- 3 節の書き方と未決事項の規則は `/done` と同じ。未決の各行は `- 決める: ` `- やる: ` `- 確かめる: ` のどれかで始め、無ければ `- なし`
 
-## 4. メタ情報と INDEX を更新する
-
-- `CASE.md` ヘッダの `状態` と `成果物` を実態に合わせる
-- `~/agent-casebook/INDEX.md`（`private/` の案件なら `private/INDEX.md`）の該当行の `状態` と `更新` を直す。行が無ければ追加する
-
-## 5. コミットする
-
-`~/agent-casebook` には他セッションの未コミット変更が残っていることがあるため、**この案件のファイルだけ**を対象にする。
+## 5. 締める
 
 ```
-git -C ~/agent-casebook add cases/<slug> INDEX.md
-git -C ~/agent-casebook commit -m "<slug>: <このセッションの要約>"
+python3 ~/agent-casebook/tools/casebook.py finish $1 --entry ~/agent-casebook/.tmp/writeback-entry.md [--state <進行中|保留|完了>] [--artifacts "<成果物>"]
 ```
 
-`private/` の案件は `.gitignore` されているため、コミット対象が無いのが正しい。
-その場合は手順 5 を飛ばし、飛ばしたことを報告に含める。
-
-push は行わない。作業中のリポジトリでの commit / push もこのコマンドでは行わない。
+スクリプトが書式を検査して追記し、ヘッダと INDEX を更新し、ダッシュボードを再生成し、
+記録リポで**この案件のファイルだけ**をコミットする（他案件の未コミット変更は巻き込まない）。
+`private/` の案件はコミット対象が無いのが正しい。push は行わない。
 
 ## 6. 報告する
 
-`CASE.md` の絶対パス、追記したエントリの見出し、コミットハッシュを 1 行ずつ示す。
-失敗した手順があれば、成功した手順と併せて明示する（黙って飛ばさない）。
+スクリプトの出力をもとに、`CASE.md` のパス、追記したエントリの見出し、コミットハッシュを 1 行ずつ示す。
+失敗した手順があれば明示する。

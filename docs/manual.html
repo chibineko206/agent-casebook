@@ -400,7 +400,6 @@ footer p { max-width: 44em; margin: 0 0 6px; }
       <a href="#repo">別リポを作る判定</a>
       <a href="#casemd">CASE.md の書き方</a>
       <a href="#layers">ルールの階層</a>
-      <a href="#review">見直し予定</a>
     </nav>
   </aside>
 
@@ -462,7 +461,7 @@ footer p { max-width: 44em; margin: 0 0 6px; }
 
     <section id="scenarios">
       <h2>ケース別の対処</h2>
-      <p class="lede">日常で出会う 8 つの場面をどう扱うか。詳細は各節にあるが、まずここだけで動ける。</p>
+      <p class="lede">日常で出会う 7 つの場面をどう扱うか。詳細は各節にあるが、まずここだけで動ける。</p>
 
       <h3>新規に相談する</h3>
       <p>何を始めるか言うだけ。<code>mkdir</code> も採番も不要で、相談だけで終わるなら何も作られない。成果物が出た時点か <code>/done</code> を打った時点で Claude が <code>cases/&lt;slug&gt;/</code> を作る。人事・評価に関わるなら、そう伝えれば <code>private/</code> に置かれる。手順は<a href="#flow">案件の進め方</a>。</p>
@@ -508,14 +507,6 @@ footer p { max-width: 44em; margin: 0 0 6px; }
         <li><strong>人事情報を含むもの</strong> — 上のいずれでも置き先は <code>private/&lt;slug&gt;/</code></li>
       </ul>
 
-      <h3>投稿記事を書く</h3>
-      <p>「〜の記事を書きたい」と言えば、Claude が <code>article-&lt;題材&gt;</code> の案件を分類「記事」で起票する。<strong>記事 1 本につき 1 案件</strong>で、相談の管理フォルダを別に作ったり、その下に記事ごとのフォルダを切ったりはしない（<a href="#structure">構造</a>の「1 階層」の原則）。記事の一覧は <code>INDEX.md</code> の分類「記事」か <code>ls cases/ | grep article-</code> で得る。</p>
-      <ul>
-        <li><strong>本文の下書き</strong> — <code>article.md</code>。冒頭に読み手・目標規定文・投稿先を書く</li>
-        <li><strong>壁打ちログ</strong> — <code>chat-log/YYYY-MM-DD-&lt;ツール名&gt;.md</code>。出典として残し、書き換えない</li>
-        <li><strong>投稿先と投稿日</strong> — 投稿したら <code>CASE.md</code> の「関連」とエントリに記録する</li>
-        <li><strong>記事をまたいで使うもの</strong>（投稿先ごとの書式、読み手の想定、過去記事の一覧） — 案件ではなく <code>docs/</code> に置く</li>
-      </ul>
     </section>
 
     <section id="who">
@@ -573,17 +564,7 @@ tools/              ダッシュボード生成（dashboard.py）と Launcher（
                     ユーザー共通コマンド /writeback（templates/writeback.md を置く）</code></pre>
       <p>ディレクトリ名は slug のみで、<strong>番号を振らない</strong>。採番を待つ手間がそのまま「まず起票」の摩擦になり、記録しなくなる原因になるため。</p>
       <p><code>cases/</code> は <strong>1 階層</strong>で、分類ごとのフォルダ（例: <code>cases/articles/&lt;slug&gt;/</code>）は作らない。hook と <code>/done</code> が <code>cases/*/CASE.md</code> の 1 階層だけを探すため、入れ子にした案件は起動時の表示と <code>/done</code> 漏れの検知から外れる。案件の種類は <code>INDEX.md</code> の分類列と slug の接頭語で表し、<code>ls cases/ | grep article-</code> のように絞る。</p>
-      <p>決まっている接頭語は次のとおり。<code>app-</code> のような製品名・サービス名は対象の名前であって、接頭語の規則ではない。</p>
-      <div class="scroller">
-        <table>
-          <thead>
-            <tr><th>接頭語</th><th>分類</th><th>使い方</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>article-</code></td><td>記事</td><td>社内などへ投稿する記事。記事 1 本につき 1 案件とし、題材を続ける（例: <code>article-agile-estimation</code>）。本文の下書きは <code>article.md</code>、執筆前に AI と壁打ちしたログは <code>chat-log/</code> に <code>YYYY-MM-DD-&lt;ツール名&gt;.md</code> で置く。投稿先の書式など記事をまたいで使うものは <code>docs/</code> に置く</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <p>接頭語の規則は利用側で決め、<code>.claude/rules/</code> に書く（例: <code>article-</code> を分類「記事」の案件に付ける）。製品名やサービス名は対象の名前であって、接頭語の規則ではない。</p>
       <p>GitHub issue は使わない。issue の価値は共有・状態管理・通知だが、ローカルの個人利用ではどれも要らない。</p>
     </section>
 
@@ -837,19 +818,6 @@ tools/              ダッシュボード生成（dashboard.py）と Launcher（
       <p><code>CLAUDE.md</code> と Skill（<code>.claude/commands/</code>）の分担は「<strong>制約は <code>CLAUDE.md</code>、手順は Skill</strong>」。<code>CLAUDE.md</code> は毎ターン全文が載るので常時効かせる制約だけを置き、Skill は呼ばれたときだけ載るので長い手順を置く。</p>
     </section>
 
-    <section id="review">
-      <h2>見直し予定</h2>
-      <p class="lede">この運用は 2026-09-09 に始め、2026-10-07 に 1 か月分（12 案件・30 エントリ）を見直した。</p>
-      <ul>
-        <li><strong>3 節の書式は維持する。</strong><code>/done</code> の不具合追跡が 4 セッションにまたがり、<code>CASE.md</code> だけで続けられた。記録漏れは 30 エントリ中 1 件。ただし「見送った案」を書いていない案件が 11 件中 5 件あり、仕様変更のときに効く節なので意識して残す</li>
-        <li><strong><code>INDEX.md</code> の自動生成は見送る。</strong>12 件で閾値の 10 件を超えたが、手書きの負担は <code>/done</code> ごとに 1 行で、進行中の一覧は hook が <code>CASE.md</code> から生成している。「完了（〜へ統合）」のような注記も手書きだから残せる。負担が出たら再検討する</li>
-        <li><strong>合わなかった点は引き続き運用を扱う案件の <code>CASE.md</code> に追記する。</strong>それ自体が次の改善材料になる</li>
-        <li>会社 Org への移行タイミングは未決</li>
-        <li><strong>hook は 2 つとも継続する。</strong><code>SessionStart</code> が進行中案件と前回の <code>/done</code> 漏れを表示し、<code>SessionEnd</code> が「未コミットの変更があるのに <code>CASE.md</code> が未更新」を検知して次回に持ち越す。1 か月で煩わしさの記録はない</li>
-        <li><code>Stop</code> hook は使わない。応答を終えるたびに発火する仕様で「セッションの終わり」を判定できないため、目的に合わない</li>
-        <li><code>private/</code> の <code>git add</code> を止める PreToolUse hook は作っていない。<code>.gitignore</code> で足りるため（<code>git add -f</code> を自分で叩かない限り不要）</li>
-      </ul>
-    </section>
 
     <footer>
       <p>設計の経緯と見送った案は <code>docs/000-design.md</code> にある。</p>
