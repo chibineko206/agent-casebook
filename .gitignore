@@ -16,5 +16,9 @@ private/
 # Office のロックファイル
 ~$*
 
-# Python のキャッシュ
+# 生成し直せるもの（規則は CLAUDE.md）。案件ごとの出力は各案件の都合で足す
 __pycache__/
+node_modules/
+**/target/
+**/dist/
+**/.cache/
