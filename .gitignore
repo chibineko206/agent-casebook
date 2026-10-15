@@ -15,3 +15,6 @@ private/
 
 # Office のロックファイル
 ~$*
+
+# Python のキャッシュ
+__pycache__/

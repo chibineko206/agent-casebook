@@ -17,6 +17,7 @@ AI コーディングエージェント（現状は Claude Code）との相談�
 | `private/` | 人事情報など push しない案件（gitignore 済み） |
 | `.claude/commands/` | `/done`（セッションを記録して締める）、`/doc-check`（文書の点検） |
 | `.claude/hooks/` | SessionStart（進行中の案件と前回の記録漏れを表示）、SessionEnd（記録漏れの検知） |
+| `tools/casebook.py` | `/done` の決定的な処理（案件の特定、前回の未決の抽出、追記と書式検査、INDEX 更新、コミット） |
 | `tools/dashboard.py` | `CASE.md` から単一 HTML のダッシュボードを生成（案件一覧、未決事項の横断、時系列、検索、セッション一覧、`CASE.md` ビューア） |
 | `tools/launcher/` | ダッシュボードのボタンから Terminal や Claude Code を起動する macOS 用の小さなアプリ |
 | `templates/` | `~/.claude/CLAUDE.md`（全リポ共通の作法）と `/writeback` コマンドの雛形 |
