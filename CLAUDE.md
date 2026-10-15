@@ -19,6 +19,7 @@ private/            人事情報など push しない案件。.gitignore 済み
     <slug>/CASE.md
 docs/NNN-slug.md    案件をまたいで参照する設計メモ（NNN は文書の通し番号）
 docs/manual.html    運用マニュアル（ブラウザで開く）
+docs/001-maintenance.md  保守の運用ルール（仕組みはこのリポで変え、日々使うリポへ取り込む）
 .tmp/dashboard.html セッション一覧・案件一覧・未決事項・時系列・検索・CASE.md ビューアのダッシュボード（`tools/dashboard.py` が生成。gitignore）
 tools/              ダッシュボード生成と Launcher（`tools/launcher/build.sh` が `~/Applications/Casebook Launcher.app` を作る）
 templates/          `~/.claude/CLAUDE.md` と `~/.claude/commands/writeback.md` の雛形

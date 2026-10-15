@@ -21,6 +21,8 @@ AI コーディングエージェント（現状は Claude Code）との相談�
 | `templates/` | `~/.claude/CLAUDE.md`（全リポ共通の作法）と `/writeback` コマンドの雛形 |
 | `docs/manual.html` | 運用マニュアル（ブラウザで開く） |
 | `docs/000-design.md` | 設計と見送った案 |
+| `docs/001-maintenance.md` | 保守の運用ルール（このリポを正にして、日々使うリポへ取り込む流れ） |
+| `tools/check-public.sh` | 公開前の点検（絶対パス、メール、手元で決めた禁止語） |
 
 ## セットアップ
 
