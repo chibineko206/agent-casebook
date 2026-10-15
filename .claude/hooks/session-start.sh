@@ -48,6 +48,10 @@ else
   msg="■ 進行中の案件はありません"$'\n'
 fi
 
+# 利用側の追加表示（任意）。.claude/hooks/session-start.local.sh があれば読み込み、変数 msg に追記してもらう。
+# このファイルは取り込みの対象外なので、仕組みの更新で上書きされない
+[ -f .claude/hooks/session-start.local.sh ] && . .claude/hooks/session-start.local.sh
+
 # 前回 /done し忘れの形跡
 if [ -f .claude/pending ]; then
   msg="${msg}"$'\n'"■ 前回 /done していません: $(cat .claude/pending)"$'\n'

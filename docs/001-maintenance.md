@@ -34,7 +34,7 @@ submodule や subtree は使わない。取り込み対象は 20 ファイル程
 
 これらが片付いたら移行措置は終わり、日々使うリポでは全体の調整を行わない。以後の改修はすべてこのリポで行い、日々使うリポは 1 ユーザーとして取り込むだけになる。公開向けの整備（README、文書の体裁、ライセンス）は最初からこのリポで直接行う。
 
-取り込み対象は次のとおり。日々使うリポの固有ファイル（`INDEX.md`、`cases/`、`.claude/settings.local.json`）は対象外。
+取り込み対象は次のとおり。日々使うリポの固有ファイル（`INDEX.md`、`cases/`、`.claude/settings.local.json`、`.claude/hooks/*.local.sh`、`.claude/rules/`）は対象外。利用側の追加表示は `.claude/hooks/session-start.local.sh` に書くと、更新で上書きされない。
 
 ```
 CLAUDE.md
