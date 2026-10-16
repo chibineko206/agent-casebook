@@ -82,3 +82,29 @@
 - 確かめる: Launcher を `tools/launcher/build.sh` でビルドし、`casebook://` の 5 動作が通るか。自分、次の改修時
 - 確かめる: 作り直した `/writeback` を別リポの Code セッションから実際に打って通るか。自分、次に別リポで作業するとき
 - 決める: Public 化の時期。自分、上の整備が終わったら
+
+---
+
+## 2026-10-16 [Code] push 先を個人アカウントの Private リポに確定して初回 push。Launcher を検証し、リポが複数あると app が 1 つしか持てない問題を発見
+
+### やったこと
+
+- GitHub に `chibineko206/agent-casebook`（Private）を作り、`origin` として登録して main を push した（`262e409` まで）。実行前に `tools/check-public.sh` を通し、問題なしだった
+- `gh` に個人アカウント `chibineko206` を追加でログインし、push 後は会社アカウントに戻した。以後は `gh auth switch --user chibineko206` で切り替えてから push する
+- 前回の未決「Launcher を `tools/launcher/build.sh` でビルドし、`casebook://` の動作が通るか」を確かめた。ビルドと Launch Services への登録は成功。6 つの URL 形式（動作名は continue / terminal / finder / rebuild / resume の 5 種）を `launch.py --dry-run` で検証し、すべて正しく展開。不正な slug と動作名は拒否された。app 経由の実動作は finder、rebuild、案件 Terminal、セッション Terminal の 4 つが成功し、`.tmp/launcher.log` に記録された。continue と resume は、別の claude がこの `CASE.md` を同時に触るのを避けて dry-run のみ
+- 検証後、app を `~/claude-workbench/tools/launcher/build.sh` で作り直し、日々使うリポを指す状態に戻した
+
+### 判断
+
+- push 先は設計書 2 章のとおり個人アカウントの Private リポにした。作者はリポ単位で noreply アドレスに設定済みなので `git config` は変えていない。Public 化の時期は引き続き未決
+- Launcher の検証で、`Casebook Launcher.app` と `casebook://` スキームはマシンに 1 つしか持てず、app が指す `launch.py` のリポにしか案件を解決できないと分かった。このリポでビルドした時点で、日々使うリポのダッシュボード（`casebook://` リンク 82 件）のボタンが「案件が見つからない」になる。保守ルール 3 章の「配置を揃える」はこの衝突を想定していなかった。日々の利用を優先して app は日々使うリポ側に戻し、対処は未決にした
+- このリポで Launcher を検証する手段は、当面 `launch.py --dry-run` と、検証後に日々使うリポ側で作り直す手順とする
+
+### 未決事項
+
+- 決める: リポが複数あるときの Launcher の扱い。案は (a) URL にリポの識別子を含めて `launch.py` が振り分ける、(b) app は 1 つにして登録済みリポの一覧から slug を探す、(c) 開発リポでは app を作らず dry-run だけで検証する。自分、次の改修の前。「このリポだけで改修を検証する手段」と併せて決める
+- 決める: このリポだけで改修を検証する手段（サンプル案件を `cases/` に置くか、模擬リポを作るスクリプトを `tools/` に置くか）。自分、次の改修の前
+- やる: 公開前に `docs/000-design.md` の 1〜6 章と `docs/manual.html` を、作業リポの経緯に依存しない文章に整える。自分、Public 化の前
+- やる: 英語の README を足す。自分、Public 化の前
+- 確かめる: 作り直した `/writeback` を別リポの Code セッションから実際に打って通るか。自分、次に別リポで作業するとき
+- 決める: Public 化の時期（現在は Private で push 済み）。自分、上の整備が終わったら
