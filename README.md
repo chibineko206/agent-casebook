@@ -66,7 +66,7 @@ python3 tools/dashboard.py --html --open
 
 - `.claude/hooks/` のスクリプトは Claude Code のセッション開始・終了のたびに実行されます。中身は `git status` と `CASE.md` の読み取り、ダッシュボードの生成だけです
 - Launcher は `casebook://` の URL を受けると、案件の slug と動作名（Terminal を開く、Claude Code を起動する、Finder で開く、ダッシュボード再生成、セッション再開）だけを受け取って動きます。コマンド文字列は受け取りません。どの Web ページからも URL は開けるので、内容を確認してから入れてください
-- `tools/dashboard.py` は Claude Code がローカルに残すセッション記録（`~/.claude/projects/`）を読みます。この形式は Claude Code の内部仕様で、予告なく変わることがあります。動作確認した Claude Code は 2.1.287 です
+- `tools/dashboard.py` は Claude Code がローカルに残すセッション記録（`~/.claude/projects/`）を読みます。この形式は Claude Code の内部仕様で、予告なく変わることがあります。動作確認した Claude Code は 2.1.287、Python は macOS 標準の 3.9.6 です
 
 ## ライセンス
 

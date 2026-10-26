@@ -17,6 +17,8 @@ Claude Code のセッション一覧（~/.claude/projects の記録と、hook �
   python3 tools/dashboard.py --html [--open]
   python3 tools/dashboard.py --html PATH
 """
+from __future__ import annotations
+
 import html
 import json
 import os
@@ -443,18 +445,21 @@ def render_html(cases, missing, today):
         age_cls = " stale" if days is not None and days >= STALE_DAYS and c.state == "進行中" else ""
         n_open = len(c.open_items)
         periodic = c.fields.get("定期作業", "")
+        private_tag = ' <span class="tag private">private</span>' if c.private else ''
+        state_raw_html = f'<div class="muted small">{esc(c.state_raw)}</div>' if c.state_raw != c.state else ''
+        macdown_style = '' if MACDOWN else ' style="display:none"'
         rows.append(
             f"<tr data-state=\"{esc(c.state)}\" data-text=\"{esc((c.slug + ' ' + c.title + ' ' + c.category).lower())}\">"
             f"<td><a id=\"case-{esc(c.slug)}\" href=\"#view={esc(c.slug)}\" class=\"view\" data-slug=\"{esc(c.slug)}\">{esc(c.slug)}</a>"
-            f"{' <span class=\"tag private\">private</span>' if c.private else ''}"
+            f"{private_tag}"
             f"<div class=\"muted small\">{esc(c.title)}</div></td>"
             f"<td>{esc(c.category)}</td>"
             f"<td><span class=\"state s-{esc(c.state)}\">{esc(c.state)}</span>"
-            f"{'<div class=\"muted small\">' + esc(c.state_raw) + '</div>' if c.state_raw != c.state else ''}</td>"
+            f"{state_raw_html}</td>"
             f"<td class=\"nowrap\">{esc(c.last_date or '未記録')}<div class=\"muted small{age_cls}\">{age}</div></td>"
             f"<td class=\"num\">{n_open or ''}</td>"
             f"<td class=\"small\">{md_inline(periodic) if periodic else ''}</td>"
-            f"<td class=\"actions\"><a class=\"btn\" href=\"{esc(macdown_url(c.path))}\" title=\"MacDown で開く\"{'' if MACDOWN else ' style=\"display:none\"'}>MacDown</a>"
+            f"<td class=\"actions\"><a class=\"btn\" href=\"{esc(macdown_url(c.path))}\" title=\"MacDown で開く\"{macdown_style}>MacDown</a>"
             f"<a class=\"btn\" href=\"casebook://case/{esc(c.slug)}?action=continue\" title=\"Terminal で claude を起動し、CASE.md を読ませて続きを始める\">Code</a>"
             f"<a class=\"btn\" href=\"casebook://case/{esc(c.slug)}?action=terminal\" title=\"Terminal を案件ディレクトリで開く\">Term</a>"
             f"<button type=\"button\" data-copy=\"{esc(str(c.path))}\" title=\"CASE.md の絶対パスをコピー\">パス</button></td>"
@@ -479,10 +484,11 @@ def render_html(cases, missing, today):
                 f"<li data-kind=\"{esc(it.kind)}\"><span class=\"kind k-{esc(it.kind)}\">{esc(it.kind)}</span> "
                 f"{md_inline(it.text)} {' '.join(flags)}</li>"
             )
+        private_tag = ' <span class="tag private">private</span>' if c.private else ''
         open_blocks.append(
             f"<details open class=\"case-open\" data-state=\"{esc(c.state)}\"><summary>"
             f"<a href=\"#view={esc(c.slug)}&line={c.latest.line_no if c.latest else 1}\" class=\"view\" data-slug=\"{esc(c.slug)}\" data-line=\"{c.latest.line_no if c.latest else 1}\">{esc(c.slug)}</a>"
-            f"{' <span class=\"tag private\">private</span>' if c.private else ''}"
+            f"{private_tag}"
             f" <span class=\"muted small\">{esc(c.state)} · {esc(c.last_date or '未記録')} · {len(items)} 件</span>"
             f"</summary><ul>{''.join(lis)}</ul></details>"
         )
@@ -527,13 +533,15 @@ def render_html(cases, missing, today):
                 ops.append(f"<a class=\"btn\" href=\"casebook://case/{esc(x['slug'])}?action=continue\" title=\"新しいセッションで CASE.md を読ませて続きを始める（正規の道）\">Code</a>")
         case_cell = (f"<a href=\"#view={esc(x['slug'])}\" class=\"view\" data-slug=\"{esc(x['slug'])}\">{esc(x['slug'])}</a>" if x["slug_known"]
                      else (esc(x["slug"]) if x["slug"] else "<span class=\"muted\">不明</span>"))
+        branch_html = f' <span class="muted">{esc(x["branch"])}</span>' if x["branch"] else ''
+        started_html = f'<div class="muted">起動 {esc(x["started"][11:16])}</div>' if x["started"] else ''
         s_rows.append(
             f"<tr data-pending=\"{'1' if pending else '0'}\">"
             f"<td class=\"nowrap\"><span class=\"sess s-{esc(x['status'])}\">{esc(x['status'])}</span></td>"
             f"<td>{esc(x['title'])}<div class=\"muted small\" title=\"{esc(x['first'])}\">{esc(x['first'][:60])}</div></td>"
             f"<td class=\"nowrap\">{case_cell}</td>"
-            f"<td class=\"small\"><code>{esc(short_cwd)}</code>{(' <span class=\"muted\">' + esc(x['branch']) + '</span>') if x['branch'] else ''}</td>"
-            f"<td class=\"nowrap small\">{esc(last)}{('<div class=\"muted\">起動 ' + esc(x['started'][11:16]) + '</div>') if x['started'] else ''}</td>"
+            f"<td class=\"small\"><code>{esc(short_cwd)}</code>{branch_html}</td>"
+            f"<td class=\"nowrap small\">{esc(last)}{started_html}</td>"
             f"<td class=\"num\">{x['turns']}</td>"
             f"<td class=\"actions\">{''.join(ops)}</td>"
             "</tr>"
