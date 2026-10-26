@@ -206,7 +206,12 @@ def update_index(area, slug, title_hint):
         elif rows:
             s = s[:rows[0].start()] + row + "\n" + s[rows[0].start():]
         else:
-            s = s.rstrip("\n") + "\n" + row + "\n"
+            # 行がまだ無い表は、区切り行（|---|）の直後に入れる
+            sep = re.search(r"^\|[-| ]+\|[ \t]*$", s, re.M)
+            if sep:
+                s = s[:sep.end()] + "\n" + row + s[sep.end():]
+            else:
+                s = s.rstrip("\n") + "\n" + row + "\n"
         action = "追加"
     index.write_text(s, encoding="utf-8")
     return action
