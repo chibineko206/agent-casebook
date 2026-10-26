@@ -36,6 +36,12 @@ cd ~/agent-casebook
 claude            # 初回起動で hook の実行を確認される。内容は .claude/hooks/ を読んで判断してください
 ```
 
+個人の記録として使うなら、clone した直後に `origin` を外してください。`/done` は `cases/` と `INDEX.md` をコミットするので、`origin` が公開リポジトリのままだと、あとから `git push` した記録が公開側へ向かいます。`private/` は gitignore されているので、push しても出ません。
+
+```bash
+git remote remove origin      # 記録を別のリポジトリにも置きたいときは、`git remote add origin <自分の Private リポ>` で付け替える
+```
+
 任意の設定:
 
 ```bash
