@@ -92,7 +92,7 @@
 - GitHub に `chibineko206/agent-casebook`（Private）を作り、`origin` として登録して main を push した（`262e409` まで）。実行前に `tools/check-public.sh` を通し、問題なしだった
 - `gh` に個人アカウント `chibineko206` を追加でログインし、push 後は会社アカウントに戻した。以後は `gh auth switch --user chibineko206` で切り替えてから push する
 - 前回の未決「Launcher を `tools/launcher/build.sh` でビルドし、`casebook://` の動作が通るか」を確かめた。ビルドと Launch Services への登録は成功。6 つの URL 形式（動作名は continue / terminal / finder / rebuild / resume の 5 種）を `launch.py --dry-run` で検証し、すべて正しく展開。不正な slug と動作名は拒否された。app 経由の実動作は finder、rebuild、案件 Terminal、セッション Terminal の 4 つが成功し、`.tmp/launcher.log` に記録された。continue と resume は、別の claude がこの `CASE.md` を同時に触るのを避けて dry-run のみ
-- 検証後、app を `~/claude-workbench/tools/launcher/build.sh` で作り直し、日々使うリポを指す状態に戻した
+- 検証後、app を日々使うリポ側の `tools/launcher/build.sh` で作り直し、そのリポを指す状態に戻した
 
 ### 判断
 
