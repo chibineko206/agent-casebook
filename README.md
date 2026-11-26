@@ -4,7 +4,7 @@ Case-based records of your AI coding sessions. Built for Claude Code.
 
 AI コーディングエージェント（現状は Claude Code）との相談と作業を、**案件（case）単位**で 1 つのリポジトリに記録する仕組みです。
 「あの作業どこで相談したっけ」「成果物どこだっけ」「以前決めた内容から更新したい」で迷子にならないことが目的です。
-個人のローカル利用を前提にしています。Anthropic とは無関係の個人プロジェクトです。
+GitHub のテンプレートリポジトリとして配布しています。個人のローカル利用を前提にしています。Anthropic とは無関係の個人プロジェクトです。
 
 ## 何が入っているか
 
@@ -23,24 +23,37 @@ AI コーディングエージェント（現状は Claude Code）との相談�
 | `templates/` | `~/.claude/CLAUDE.md`（全リポ共通の作法）と `/writeback` コマンドの雛形 |
 | `docs/manual.html` | 運用マニュアル（ブラウザで開く） |
 | `docs/000-design.md` | 設計と見送った案 |
-| `docs/001-maintenance.md` | 保守の運用ルール（このリポを正にして、日々使うリポへ取り込む流れ） |
+| `docs/001-maintenance.md` | 保守の運用ルール（テンプレートの配布と、利用側への更新の流れ） |
+| `docs/changelog.md` | この仕組み自体の変更履歴と開発の判断 |
+| `tools/update-from-upstream.py` | 配布元から仕組みのファイルだけを取り込む（利用側の記録には触れない） |
 | `tools/check-public.sh` | 公開前の点検（絶対パス、メール、手元で決めた禁止語） |
 
 ## セットアップ
 
 前提: macOS、Claude Code、python3（ダッシュボードと hook が使う）。Launcher は AppleScript と Terminal.app を使うので macOS 専用です。
 
+1. このリポジトリの **Use this template → Create a new repository** で、自分のリポジトリを作る。**Private にする**（案件の記録が入るため）
+2. 作ったリポジトリを clone して Claude Code を起動する
+
 ```bash
-git clone <this repo> ~/agent-casebook
+git clone <自分のリポジトリの URL> ~/agent-casebook
 cd ~/agent-casebook
 claude            # 初回起動で hook の実行を確認される。内容は .claude/hooks/ を読んで判断してください
 ```
 
-個人の記録として使うなら、clone した直後に `origin` を外してください。`/done` は `cases/` と `INDEX.md` をコミットするので、`origin` が公開リポジトリのままだと、あとから `git push` した記録が公開側へ向かいます。`private/` は gitignore されているので、push しても出ません。
+テンプレートから作ったリポジトリは、このリポジトリと履歴がつながりません。`origin` は最初から自分のリポジトリで、外す作業は要りません。`cases/` は空、`INDEX.md` は案件の行が無い状態で始まります。`private/` は gitignore されているので、push しても出ません。
+
+### 仕組みの更新を取り込む
+
+履歴がつながっていないので `git pull` は使えません。更新があったら、取り込みスクリプトを使います。
 
 ```bash
-git remote remove origin      # 記録を別のリポジトリにも置きたいときは、`git remote add origin <自分の Private リポ>` で付け替える
+python3 tools/update-from-upstream.py --dry-run   # 何が変わるかを確認する
+python3 tools/update-from-upstream.py             # 取り込む（コミットはしない）
+git diff                                          # 差分を確認してコミットする
 ```
+
+置き換わるのは仕組みのファイルだけです（`CLAUDE.md`、`.claude/settings.json`、`.claude/hooks/`、`.claude/commands/`、`tools/`、`templates/`、`docs/manual.html`、`docs/chat-writeback-prompt.md`）。`cases/`、`private/`、`INDEX.md`、`.claude/rules/`、`.claude/hooks/session-start.local.sh` は触りません。仕組みのディレクトリは配布元と同じ内容に揃えるため、自分で足したファイルは消えます。独自の規則や表示は `.claude/rules/` と `session-start.local.sh` に書いてください。取り込んだ版は `.claude/upstream.json` に記録されます。
 
 任意の設定:
 
