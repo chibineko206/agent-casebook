@@ -22,9 +22,6 @@ GitHub のテンプレートリポジトリとして配布しています。個�
 | `tools/launcher/` | ダッシュボードのボタンから Terminal や Claude Code を起動する macOS 用の小さなアプリ |
 | `templates/` | `~/.claude/CLAUDE.md`（全リポ共通の作法）と `/writeback` コマンドの雛形 |
 | `docs/manual.html` | 運用マニュアル（ブラウザで開く） |
-| `docs/000-design.md` | 設計と見送った案 |
-| `docs/001-maintenance.md` | 保守の運用ルール（テンプレートの配布と、利用側への更新の流れ） |
-| `docs/changelog.md` | この仕組み自体の変更履歴と開発の判断 |
 | `tools/update-from-upstream.py` | 配布元から仕組みのファイルだけを取り込む（利用側の記録には触れない） |
 | `tools/check-public.sh` | 公開前の点検（絶対パス、メール、手元で決めた禁止語） |
 
@@ -86,6 +83,10 @@ python3 tools/dashboard.py --html --open
 - `.claude/hooks/` のスクリプトは Claude Code のセッション開始・終了のたびに実行されます。中身は `git status` と `CASE.md` の読み取り、ダッシュボードの生成だけです
 - Launcher は `casebook://` の URL を受けると、案件の slug と動作名（Terminal を開く、Claude Code を起動する、Finder で開く、ダッシュボード再生成、セッション再開）だけを受け取って動きます。コマンド文字列は受け取りません。どの Web ページからも URL は開けるので、内容を確認してから入れてください
 - `tools/dashboard.py` は Claude Code がローカルに残すセッション記録（`~/.claude/projects/`）を読みます。この形式は Claude Code の内部仕様で、予告なく変わることがあります。動作確認した Claude Code は 2.1.287、Python は macOS 標準の 3.9.6 です
+
+## 設計と開発の記録
+
+設計の経緯、保守の運用ルール、変更履歴は、テンプレートに含めないため `maintainer-docs` ブランチにあります（`docs/000-design.md`、`docs/001-maintenance.md`、`docs/changelog.md`）。
 
 ## ライセンス
 
