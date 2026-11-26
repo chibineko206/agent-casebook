@@ -2,7 +2,7 @@
 
 作成: 2026-09-09（claude.ai チャットでの検討結果を集約）
 改訂: 2026-09-09（実際の困りごとを整理し、issue ベースから案件ベースに変更）
-経緯: 運用を扱う案件の `CASE.md`（例: `cases/casebook-ops/CASE.md`）
+経緯: 運用を扱う案件の `CASE.md`（この仕組みの開発記録は `docs/changelog.md`）
 
 ## 1. 背景・課題
 
@@ -118,4 +118,4 @@ tools/              dashboard.py（単一 HTML のダッシュボード）、cas
 templates/          ~/.claude/CLAUDE.md と /writeback の雛形
 ```
 
-仕組みの正はこのリポで、日々使うリポは取り込むだけ（`docs/001-maintenance.md`）。
+仕組みの正は配布元のテンプレートリポジトリで、利用側は `tools/update-from-upstream.py` で取り込むだけ（`docs/001-maintenance.md`）。

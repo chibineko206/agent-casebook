@@ -393,6 +393,7 @@ footer p { max-width: 44em; margin: 0 0 6px; }
       <a href="#scenarios">ケース別の対処</a>
       <a href="#who">分担</a>
       <a href="#structure">構造</a>
+      <a href="#update">仕組みの更新</a>
       <a href="#flow">案件の進め方</a>
       <a href="#revisit">過去の相談に戻る</a>
       <a href="#private">private/ の扱い</a>
@@ -548,8 +549,8 @@ footer p { max-width: 44em; margin: 0 0 6px; }
     <section id="structure">
       <h2>構造</h2>
       <p class="lede">器は <code>INDEX.md</code> と <code>cases/</code> の 2 つだけ。器を増やすと一元管理という目的に反する。</p>
-      <pre><code>INDEX.md            案件一覧（git で追跡する。push は都度判断）
-cases/&lt;slug&gt;/       案件ごとの作業場（git で追跡する。push は都度判断）
+      <pre><code>INDEX.md            案件一覧（git で追跡する。push は自分の非公開リポジトリへ、都度判断）
+cases/&lt;slug&gt;/       案件ごとの作業場（git で追跡する。push は自分の非公開リポジトリへ、都度判断）
     CASE.md         メタ情報 + セッションごとの時系列ログ
     &lt;成果物&gt;        クエリ・文書・検証コードなど
 private/            人事情報など push しない案件。.gitignore 済み
@@ -566,6 +567,14 @@ tools/              ダッシュボード生成（dashboard.py）と Launcher（
       <p><code>cases/</code> は <strong>1 階層</strong>で、分類ごとのフォルダ（例: <code>cases/articles/&lt;slug&gt;/</code>）は作らない。hook と <code>/done</code> が <code>cases/*/CASE.md</code> の 1 階層だけを探すため、入れ子にした案件は起動時の表示と <code>/done</code> 漏れの検知から外れる。案件の種類は <code>INDEX.md</code> の分類列と slug の接頭語で表し、<code>ls cases/ | grep article-</code> のように絞る。</p>
       <p>接頭語の規則は利用側で決め、<code>.claude/rules/</code> に書く（例: <code>article-</code> を分類「記事」の案件に付ける）。製品名やサービス名は対象の名前であって、接頭語の規則ではない。</p>
       <p>GitHub issue は使わない。issue の価値は共有・状態管理・通知だが、ローカルの個人利用ではどれも要らない。</p>
+    </section>
+
+    <section id="update">
+      <h2>仕組みの更新</h2>
+      <p class="lede">テンプレートから作ったリポジトリは配布元と履歴がつながらない。<code>git pull</code> ではなく、取り込みスクリプトで仕組みのファイルだけを更新する。</p>
+      <pre><code>python3 tools/update-from-upstream.py --dry-run   # 変更の確認
+python3 tools/update-from-upstream.py             # 取り込み（コミットはしない）</code></pre>
+      <p>置き換わるのは <code>CLAUDE.md</code>、<code>.claude/settings.json</code>、<code>.claude/hooks/</code>、<code>.claude/commands/</code>、<code>tools/</code>、<code>templates/</code>、マニュアル。<code>cases/</code>、<code>private/</code>、<code>INDEX.md</code>、<code>.claude/rules/</code>、<code>session-start.local.sh</code> には触れない。自分の規則や表示は、更新で消えないこの 2 か所に書く。</p>
     </section>
 
     <section id="flow">
@@ -684,8 +693,8 @@ tools/              ダッシュボード生成（dashboard.py）と Launcher（
       </ul>
 
       <h3>この仕組み自体に問題が出たとき</h3>
-      <p>運用の不具合も案件として扱う。運用を扱う案件（例: <code>cases/casebook-ops/CASE.md</code>）に判断の理由と未決事項が並んでいるので、新しいセッションで読ませてから症状を伝える。</p>
-      <pre><code>cases/casebook-ops/CASE.md を読んで。hook が起動時に表示されなかった</code></pre>
+      <p>運用の不具合も案件として扱う。運用を扱う案件（例: <code>cases/&lt;運用の案件&gt;/CASE.md</code>）に判断の理由と未決事項が並んでいるので、新しいセッションで読ませてから症状を伝える。</p>
+      <pre><code>cases/&lt;運用の案件&gt;/CASE.md を読んで。hook が起動時に表示されなかった</code></pre>
       <p>これで足りるなら、それ自体がこの仕組みが機能している証拠になる。足りなければ <code>CASE.md</code> に書くべき情報が漏れていたということなので、<strong>その漏れも追記する</strong>。</p>
     </section>
 
@@ -704,7 +713,7 @@ tools/              ダッシュボード生成（dashboard.py）と Launcher（
 
       <h3>引き換えに失うもの</h3>
       <ul>
-        <li><strong>バックアップが無い。</strong>push しない以上、Time Machine 等に依存する</li>
+        <li><strong><code>private/</code> のバックアップが無い。</strong>gitignore 済みで push されないので、Time Machine 等に依存する</li>
         <li>案件名を漏らさないため <code>INDEX.md</code> は 2 つに分けている（<code>private/INDEX.md</code> 側も push されない）</li>
       </ul>
     </section>
