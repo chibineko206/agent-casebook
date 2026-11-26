@@ -1,5 +1,7 @@
 # 保守と配布の運用ルール
 
+このファイルと `docs/000-design.md`、`docs/changelog.md` は、テンプレートに含めないため `maintainer-docs` ブランチに置く。テンプレートは既定ブランチ（main）だけを複製する。改修のたびに、main の PR とは別にこのブランチへ `docs/changelog.md` の追記をコミットする。
+
 このリポ（agent-casebook）は、GitHub の Template repository として仕組みを配布する。利用者は「Use this template」で自分の非公開リポジトリを作り、日々の記録はそちらに書く。
 読み手は保守する本人。主題は「仕組みの変更をどこで行い、どう配り、何を記録するか」の 1 点。
 
